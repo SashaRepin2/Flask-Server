@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Create post</div>
+
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('main.create_post') }}">
+                        {{ form.hidden_tag() }}
+
+
+                        {% if form.title.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.title.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {% if form.body.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.body.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+
+                        <div class="row mb-3">
+                            <label for="title" class="col-md-4 col-form-label text-md-end">Title</label>
+
+                            <div class="col-md-6">
+                                <input id="title" type="text" class="form-control"
+                                       name="title" value="" required autofocus maxlength="100">
+                                <span class="invalid-feedback" role="alert">
+                                        <strong></strong>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="body" class="col-md-4 col-form-label text-md-end">Body</label>
+
+                            <div class="col-md-6">
+                                <textarea id="body" maxlength="500"
+                                          class="form-control" name="body"
+                                          required></textarea>
+
+                                <span class="invalid-feedback" role="alert">
+                                        <strong></strong>
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Create
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

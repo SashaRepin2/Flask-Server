@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Register</div>
+                <div class="card-body">
+                    <form method="POST" action="{{url_for('auth.register')}}">
+                        {{ form.hidden_tag() }}
+
+
+                        {% with errors = get_flashed_messages(category_filter=["auth"]) %}
+                        {% if errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for msg in errors %}
+                            <span style="form-field-error">{{ msg }}</span>
+                            {% endfor -%}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+
+                        {% if form.first_name.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.first_name.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row mb-3">
+                            <label for="first_name" class="col-md-3 col-form-label text-md-end">First name</label>
+
+                            <div class="col-md-7">
+                                <input id="first_name" type="text" class="form-control" name="first_name" {% if
+                                       form.first_name.data %} value="{{form.first_name.data}}" {% endif %}
+                                       required autocomplete="first_name">
+                            </div>
+                        </div>
+
+
+                        {% if form.last_name.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.last_name.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row mb-3">
+                            <label for="last_name" class="col-md-3 col-form-label text-md-end">Last name</label>
+
+                            <div class="col-md-7">
+                                <input id="last_name" type="text" class="form-control" name="last_name" {% if
+                                       form.last_name.data %} value="{{ form.last_name.data }}" {% endif %}
+                                       required autocomplete="last_name">
+                            </div>
+                        </div>
+
+
+                        {% if form.login.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.login.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row mb-3">
+                            <label for="login" class="col-md-3 col-form-label text-md-end">Login</label>
+
+                            <div class="col-md-7">
+                                <input id="login" type="text" class="form-control" name="login" {% if form.login.data %}
+                                       value="{{form.login.data}}" {% endif %} required
+                                       autocomplete="login" autofocus>
+                            </div>
+                        </div>
+
+
+                        {% if form.email.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.email.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row mb-3">
+                            <label for="email" class="col-md-3 col-form-label text-md-end">Email</label>
+
+                            <div class="col-md-7">
+                                <input id="email" type="email" class="form-control" name="email" {% if form.email.data
+                                       %} value="{{form.email.data}}" {% endif %} required
+                                       autocomplete="email">
+                            </div>
+                        </div>
+
+
+                        {% if form.password.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.password.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row mb-3">
+                            <label for="password" class="col-md-3 col-form-label text-md-end">Password</label>
+
+                            <div class="col-md-7">
+                                <input id="password" type="password" class="form-control" name="password" required
+                                       autocomplete="new-password">
+                            </div>
+                        </div>
+
+
+                        {% if form.password_confirmation.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.password_confirmation.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row mb-3">
+                            <label for="password-confirm" class="col-md-3 col-form-label text-md-end">Confirm
+                                password</label>
+
+                            <div class="col-md-7">
+                                <input id="password-confirm" type="password" class="form-control"
+                                       name="password_confirmation" required autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-md-3 col-form-label text-md-end" for="gender">Gender</label>
+                            <div class="col-md-7">
+                                <select class="form-select" aria-label="Default select example" id="gender"
+                                        name="gender">
+                                    <option selected value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        {% if form.age.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.age.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row mb-3">
+                            <label class="col-md-3 col-form-label text-md-end" for="age">Age</label>
+                            <div class="col-md-7">
+                                <select class="form-select" aria-label="Default select example" id="age" name="age">
+                                    <option selected value="adult">Older than 18</option>
+                                    <option value="child">Less than 18</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        {% if form.agreement.errors %}
+                        <div class="row mb-3 mx-5 alert alert-danger">
+                            {% for error in form.agreement.errors %}
+                            <span style="form-field-error">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="form-check mb-3 mx-3">
+                            <input class="form-check-input" type="checkbox" name="agreement" id="agreement" {% if
+                                   form.agreement.data %} checked {% endif %}>
+                            <label class="form-check-label" for="agreement">
+                                I accept the terms and conditions for signing up to this service, and hereby confirm
+                                I have read the privacy policy.
+                            </label>
+                        </div>
+
+
+                        <div class="row mb-0 justify-content-center">
+                            <div class="col-md-7 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Register
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}

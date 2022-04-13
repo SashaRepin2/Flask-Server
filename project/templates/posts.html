@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="posts d-flex flex-column align-items-center justify-content-center">
+    {% if posts %}
+    {% for post in posts %}
+    <div class="post d-flex flex-column mx-4 my-2 w-100">
+        <div class="post__header d-flex justify-content-between w-100">
+            <span>Title: {{post.title}}</span>
+            <span>{{post.timestamp}}</span>
+        </div>
+        <div class="post__body w-100">{{post.body}}</div>
+        <div class="post__footer w-100 d-flex justify-content-end"> Author: {{post.author.login}}</div>
+    </div>
+    {% endfor %}
+    {% else %}
+
+    <div class="alert alert-primary m-0">
+        Посты не найдены
+    </div>
+
+    {% endif %}
+</div>
+
+{% endblock %}

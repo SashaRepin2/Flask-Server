@@ -1,0 +1,122 @@
+/* *,
+*::before,
+*::after {
+  box-sizing: border-box !important;
+} */
+
+#change_theme {
+  cursor: pointer;
+  position: absolute;
+  color: rgb(33, 33, 63);
+  right: 20px;
+}
+
+body.dark {
+  color: #b9b9b9;
+  background-color: rgb(36, 36, 48);
+}
+
+body.dark nav {
+  background-color: rgb(20, 20, 32) !important;
+}
+
+body.dark .navbar-brand,
+body.dark .navbar-light .navbar-nav .nav-link {
+  color: white;
+}
+
+body.dark .card {
+  background-color: rgb(34, 34, 49);
+  border-color: rgb(8, 8, 12);
+}
+
+body.dark .card-header {
+  background-color: rgb(20, 20, 32);
+}
+
+body.dark #change_theme {
+  color: yellow;
+}
+
+@media screen and (max-width: 767px) {
+  #change_theme {
+    position: fixed;
+    z-index: 1001;
+    right: 25px;
+    bottom: 25px;
+    top: auto;
+    left: auto;
+  }
+}
+
+.posts {
+  border-radius: 10px;
+  border: 2px solid rgb(61, 61, 90);
+  margin: 0 auto;
+  max-width: 1080px;
+  background-color: rgb(195, 195, 224);
+  padding: 25px 15px;
+}
+
+body.dark .posts {
+  background-color: rgb(20, 20, 32);
+}
+
+.post {
+  background-color: rgb(42, 42, 80);
+  border-radius: 10px;
+  border: 3px solid rgb(61, 61, 90);
+  text-align: justify;
+}
+.post__header {
+  border-radius: 10px 10px 0 0;
+  background-color: rgb(20, 20, 32);
+  padding: 10px;
+}
+
+.post__body {
+  padding: 10px;
+}
+
+.post__footer {
+  border-radius: 0 0 10px 10px;
+  background-color: rgb(20, 20, 32);
+  padding: 10px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 10px;
+  border: 2px solid rgb(61, 61, 90);
+  margin: 0 auto;
+  max-width: 1080px;
+  padding: 15px;
+  background-color: rgb(20, 20, 32);
+}
+
+.profile__field {
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 2px solid rgb(61, 61, 90);
+  background-color: rgb(20, 20, 32);
+  padding: 15px;
+}
+
+.followers {
+  border-radius: 10px;
+  border: 2px solid rgb(61, 61, 90);
+  margin: 10px;
+  /* width: 100%; */
+  background-color: rgb(25, 25, 65);
+  padding: 25px 15px;
+}
+
+.followers__field {
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 2px solid rgb(61, 61, 90);
+  background-color: rgb(20, 20, 32);
+  padding: 15px;
+}

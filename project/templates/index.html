@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="profile">
+    {% if user %}
+    <div class="profile__field"><span>Login:</span> {{ user.login }}</div>
+    <div class="profile__field"><span>Email:</span> {{ user.email }}</div>
+    <div class="profile__field"><span>Last name:</span> {{ user.last_name }}</div>
+    <div class="profile__field"><span>First name:</span> {{ user.first_name }}</div>
+    <div class="profile__field"><span>Gender:</span> {{ user.gender }}</div>
+    <div class="profile__field"><span>Age:</span> {% if user.age %} Старше 18 лет {% endif %}</div>
+
+    <div class="followers">
+        {% if user.followed %}
+        {% for follower in user.followed %}
+        <div class="followers__field"> {{follower.followed.email}}</div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% else %}
+    <div> Пользовтель не найден</div>
+    {% endif %}
+</div>
+
+{% endblock %}
