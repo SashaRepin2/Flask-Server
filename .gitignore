@@ -19,6 +19,9 @@ lib
 lib64
 __pycache__
 
+# DataBase
+*.db
+
 # Installer logs
 pip-log.txt
 
