@@ -7,17 +7,6 @@ from project import mail
 from config import Config
 
 
-# def sendMessageToEmail(email, link):
-#     # Отправка сообщения почту пользователя
-#     msg = Message("Registration", recipients=[email])
-#     msg_link = f'{app.config["SERVER_URL"]}/activate/{link}'
-#     msg.html = '<div> ' \
-#                '<h1>Для активации аккаунта перейдите на ссылке:</h1> ' \
-#                f'<a href="{msg_link}">переход по ссылке</a>' \
-#                '</div>'
-#     mail.send(msg)
-
-
 def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)

@@ -9,44 +9,45 @@ from ..models import User
 
 
 def register():
-    registerForm = RegistrationForm()
-    if registerForm.validate_on_submit():
+    register_form = RegistrationForm()
+    if register_form.validate_on_submit():
+        # CREATE DB MODEL OBJECT
         user = User(
-            first_name=registerForm.first_name.data,
-            last_name=registerForm.last_name.data,
-            login=registerForm.login.data,
-            email=registerForm.email.data.lower(),
-            password=registerForm.password.data,
-            gender=registerForm.gender.data,
+            first_name=register_form.first_name.data,
+            last_name=register_form.last_name.data,
+            login=register_form.login.data,
+            email=register_form.email.data.lower(),
+            password=register_form.password.data,
+            gender=register_form.gender.data,
+            confirmed_link='asd',
             age=True,
         )
 
         db.session.add(user)
         db.session.commit()
-        send_email(user.email, actLink=user.activationLink)
+
+        # SEND MAIl TO USER
+        # send_email(user.email, actLink=user.confirmed_link)
+
         flash('A confirmation email has been sent to you by email', 'auth')
         return redirect(url_for('auth.login'))
 
-    return render_template('auth/register.html', title='Register', form=registerForm)
+    return render_template('auth/registration.html', title='Register', form=register_form)
 
 
 def login():
-    loginForm = LoginForm()
-    if loginForm.validate_on_submit():
+    # If user already in account, then redirect him
+    if current_user.is_authenticated:
+        redirect(url_for('main.home'))
 
-        # If user already in account
-        if current_user.is_authenticated:
-            redirect(url_for('main.index'))
+    # Validate form data
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        user = User.query.filter_by(email=login_form.email.data.lower()).first()
+        login_user(user, True)
+        return redirect(url_for('main.all_blogs', page=1))
 
-        user = User.query.filter_by(email=loginForm.email.data).first()
-
-        if user is not None and user.verify_password(loginForm.password.data):
-            login_user(user, loginForm.remember.data)
-            return redirect(url_for('main.index', id=user.id))
-
-        flash('Invalid username or password', 'auth')
-
-    return render_template("auth/login.html", title='Login', form=loginForm)
+    return render_template("auth/login.html", title='Login', form=login_form)
 
 
 def logout():

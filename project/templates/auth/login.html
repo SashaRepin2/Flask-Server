@@ -1,85 +1,69 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Login</div>
+<div class="form card">
+    <form action="{{url_for('auth.login')}}" method="post" id="form_register">
+        {{ form.hidden_tag() }}
 
-                <div class="card-body">
-                    <form method="POST" action="{{ url_for('auth.login') }}">
-                        {{ form.hidden_tag() }}
-
-
-                        {% with errors = get_flashed_messages(category_filter=["auth"]) %}
-                        {% if errors %}
-                        <div class="row mb-3 mx-5 alert alert-danger">
-                            {% for msg in errors %}
-                            <span style="form-field-error">{{ msg }}</span>
-                            {% endfor -%}
-                        </div>
-                        {% endif %}
-                        {% endwith %}
-
-
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">Email Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control"
-                                       name="email" value="" required autocomplete="email" autofocus>
-
-
-                                <span class="invalid-feedback" role="alert">
-                                        <strong></strong>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password"
-                                       class="form-control" name="password"
-                                       required autocomplete="current-password">
-
-
-                                <span class="invalid-feedback" role="alert">
-                                        <strong></strong>
-                                </span>
-
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                                    <label class="form-check-label" for="remember">
-                                        Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-
-                                <a class="btn btn-link" href="">
-                                    Forgot Your Password?
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        <div class="form__header">
+            <div class="form__title">
+                Авторизация
+            </div>
+            <div class="form__settings">
             </div>
         </div>
-    </div>
-</div>
+        <div class="form__content">
+            <div class="form__content_field">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path
+                            d="M464 64C490.5 64 512 85.49 512 112C512 127.1 504.9 141.3 492.8 150.4L275.2 313.6C263.8 322.1 248.2 322.1 236.8 313.6L19.2 150.4C7.113 141.3 0 127.1 0 112C0 85.49 21.49 64 48 64H464zM217.6 339.2C240.4 356.3 271.6 356.3 294.4 339.2L512 176V384C512 419.3 483.3 448 448 448H64C28.65 448 0 419.3 0 384V176L217.6 339.2z"/>
+                </svg>
+                <input name="email" placeholder="Введите почту" type="email" maxlength="50" {% if form.email.data %}
+                       value="{{form.email.data}}" {% endif %}
+                       required/>
+            </div>
+            <div class="form__content_field">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                            d="M80 192V144C80 64.47 144.5 0 224 0C303.5 0 368 64.47 368 144V192H384C419.3 192 448 220.7 448 256V448C448 483.3 419.3 512 384 512H64C28.65 512 0 483.3 0 448V256C0 220.7 28.65 192 64 192H80zM144 192H304V144C304 99.82 268.2 64 224 64C179.8 64 144 99.82 144 144V192z"/>
+                </svg>
+                <input name="password" placeholder="Введите Пароль" type="password" maxlength="50" required/>
+            </div>
 
+            <!-- ERROS FORM  -->
+            {% if form.errors %}
+            <div class="validate-errors">
+                <div class="validate-errors__title">Некорректные данные</div>
+                <div class="validate-errors__body">
+                    {% for fieldName, errorMessages in form.errors.items() %}
+                    <div class=" validate-error">
+                        <div class="validate-error__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path
+                                        d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM232 152C232 138.8 242.8 128 256 128s24 10.75 24 24v128c0 13.25-10.75 24-24 24S232 293.3 232 280V152zM256 400c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z"/>
+                            </svg>
+                        </div>
+                        <div class="validate-error__text">
+                            <div class="validate-error__text_field">{{ fieldName }}:</div>
+                            <div class="validate-error__text_name">{{ ', '.join(errorMessages) }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+        <div class="form__footer">
+            <button type="submit">
+                <span>Войти</span>
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path
+                                d="M503.7 226.2l-176 151.1c-15.38 13.3-39.69 2.545-39.69-18.16V272.1C132.9 274.3 66.06 312.8 111.4 457.8c5.031 16.09-14.41 28.56-28.06 18.62C39.59 444.6 0 383.8 0 322.3c0-152.2 127.4-184.4 288-186.3V56.02c0-20.67 24.28-31.46 39.69-18.16l176 151.1C514.8 199.4 514.8 216.6 503.7 226.2z"/>
+                    </svg>
+                </div>
+            </button>
+        </div>
+    </form>
+</div>
 {% endblock %}

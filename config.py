@@ -5,15 +5,16 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    DEBUG = True
+    # DEBUG = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
+
 
     APP_NAME = os.environ.get('APP_NAME') or 'Flask app'
     FLASK_RUN_HOST = 'localhostd'
     SERVER_URL = os.environ.get('SERVER_URL') or 'http://localhost:5000'
     CLIENT_URL = os.environ.get('CLIENT_URL') or 'http://yandex.ru'
 
-
+    # FLASK_APP
 
     # CORS CONFIG
     # CORS_ORIGINS = "http://localhost:3000"

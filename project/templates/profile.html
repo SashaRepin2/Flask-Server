@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+
+{% block links %}
+<link href="{{ url_for('static', filename='styles/profile.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="profile">
+    <form method="POST" action="{{ url_for('main.upload_avatar') }}" enctype="multipart/form-data">
+        <p><input type="file" name="file"></p>
+        <p><input type="submit" value="Upload"></p>
+    </form>
+    <div class="avatar">
+        <!-- Avatar image -->
+        <img class="avatar__image" src="{{ url_for('main.load_avatar', id=user.id)}}">
+    </div>
+
+    {% if user %}
+    <div class="profile__field"><span>Login:</span> {{ user.login }}</div>
+    <div class="profile__field"><span>Email:</span> {{ user.email }}</div>
+    <div class="profile__field"><span>Last name:</span> {{ user.last_name }}</div>
+    <div class="profile__field"><span>First name:</span> {{ user.first_name }}</div>
+    <div class="profile__field"><span>Gender:</span> {{ user.gender }}</div>
+    <div class="profile__field"><span>Age:</span> {% if user.age %} Старше 18 лет {% endif %}</div>
+
+    <div class="followers">
+        {% if user.followed %}
+        {% for follower in user.followed %}
+        <div class="followers__field"> {{follower.followed.email}}</div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% else %}
+    <div> Пользовтель не найден</div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

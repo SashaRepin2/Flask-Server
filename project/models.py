@@ -1,15 +1,42 @@
 import uuid
 from datetime import datetime
+from enum import Enum
 
-from flask_login import UserMixin, AnonymousUserMixin
+import bleach
+from flask_login import UserMixin
 from project import login_manager
-
+from markdown import markdown
 from project import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
+class Roles(Enum):
+    CREATOR = 'creator'
+    ADMIN = 'admin'
+    USER = 'user'
+
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    permissions_level = db.Column(db.Integer)
+    users = db.relationship('User', backref='role', lazy='dynamic')
+
+    @staticmethod
+    def insert_roles():
+        for role in Roles:
+            role_db = Role.query.filter_by(name=role).first()
+            if role_db is None:
+                role_db = Role(name=role)
+            db.session.add(role_db)
+        db.session.commit()
+
+
 class Follow(db.Model):
     __tablename__ = 'follows'
+
+    # Fields
     follower_id = db.Column(db.Integer, db.ForeignKey('users.id'),
                             primary_key=True)
     followed_id = db.Column(db.Integer, db.ForeignKey('users.id'),
@@ -17,22 +44,30 @@ class Follow(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"<{self.follower_id}> {self.followed_id}"
+        return f"<Follow> {self.follower_id} follow {self.followed_id}"
 
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
+
+    # Fields
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True, nullable=False)
-    login = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    first_name = db.Column(db.String(50), nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False)
+    login = db.Column(db.String(25), nullable=False)
+    last_name = db.Column(db.String(25), nullable=False)
+    first_name = db.Column(db.String(25), nullable=False)
+    password_hash = db.Column(db.String(200), nullable=False)
     age = db.Column(db.String(20), nullable=False)
     gender = db.Column(db.String(20), nullable=False)
-    isActivated = db.Column(db.Boolean, nullable=False, default=False)
-    activationLink = db.Column(db.String(200), nullable=False)
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    confirmed = db.Column(db.Boolean, nullable=True, default=True)  # For Test
+    confirmed_link = db.Column(db.String(200), nullable=True)
+    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    avatar = db.Column(db.LargeBinary, default=None)
+
+    # Relationships
+    blogs = db.relationship('Blog', backref='author', lazy='dynamic')
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     followed = db.relationship('Follow',
                                foreign_keys=[Follow.follower_id],
                                backref=db.backref('follower', lazy='joined'),
@@ -44,32 +79,18 @@ class User(UserMixin, db.Model):
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
 
-    # profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'),
-    #                        nullable=False)
-    # profile = db.relationship('Profile',
-    #                           backref=db.backref('users_profile', lazy=True))
-    #
-    # token_id = db.Column(db.Integer, db.ForeignKey('token.id'),
-    #                      nullable=False)
-    # token = db.relationship('Token',
-    #                         backref=db.backref('users_token', lazy=True))
-
-    def __init__(self, email, login, first_name, last_name, age, gender, password):
-        self.email = email
-        self.last_name = last_name
-        self.first_name = first_name
-        self.login = login
-        self.age = age
-        self.gender = gender
-        self.password_hash = User.hashed_password(password)
-        self.activationLink = User.get_activation_link()
-
     def __repr__(self):
         return f"<{self.id}> {self.email},  {self.login}"
 
-    @staticmethod
-    def hashed_password(password):
-        return generate_password_hash(password)
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        print(generate_password_hash(password))
+        self.password_hash = generate_password_hash(password)
+        print(self.password_hash)
 
     @staticmethod
     def get_user_with_email_and_password(email, password):
@@ -99,37 +120,44 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 
-#
-# class Profile(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(50), nullable=False)
-#     role = db.Column(db.String(30), default='default', nullable=False)
-#     date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-#
-#     def __init__(self, name):
-#         self.name = name
-#
-#     def __repr__(self):
-#         return f"<{self.id}>  {self.name}, {self.role}, {self.date_created}, {self.user_id}"
-#
-#
-# class Token(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     refresh_token = db.Column(db.String(100), nullable=True)
-#
-#     def __init__(self, ip_address, refresh_token):
-#         self.ip_address = ip_address
-#         self.refresh_token = refresh_token
-#
-#     def __repr__(self):
-#         return f"<{self.id}>  {self.ip_address}, {self.refresh_token}, {self.user_id}"
-class Post(db.Model):
-    __tablename__ = 'posts'
+class Blog(db.Model):
+    __tablename__ = 'blogs'
+
+    # Fields
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text)
-    body = db.Column(db.Text)
+    title = db.Column(db.String(25))
+    description = db.Column(db.String(50))
+    preview_image = db.Column(db.LargeBinary)
+    content = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    # Relationships
+    comments = db.relationship('Comment', backref='blog', lazy='dynamic')
+
+    @staticmethod
+    def on_changed_content(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
+                        'h1', 'h2', 'h3', 'p', 'img']
+        target.body_html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, strip=True))
+
     def __repr__(self):
-        return f"<{self.id}> {self.title}, {self.body},{self.timestamp},{self.author_id}"
+        return f"<{self.id}> {self.title}, {self.author_id}"
+
+
+# Event listener Blog Content changes
+db.event.listen(Blog.content, 'set', Blog.on_changed_content)
+
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+
+    # Fields
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    blog_id = db.Column(db.Integer, db.ForeignKey('blogs.id'))

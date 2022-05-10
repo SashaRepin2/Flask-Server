@@ -10,5 +10,4 @@ from project import create_app, db
 
 # Start the server
 app = create_app(os.getenv("FLASK_CONFIG") or "default")
-
 migrate = Migrate(app, db)

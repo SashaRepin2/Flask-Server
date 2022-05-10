@@ -1,0 +1,314 @@
+*,
+*::after,
+* ::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+.app {
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+
+	padding-top: 100px;
+	background: radial-gradient(101.46% 305.4% at 0% 0%, #ffcafb 0%, #7b72f8 100%);
+}
+
+main {
+	display: grid;
+	grid-template-columns: repeat(12, 80px);
+	justify-content: center;
+	align-items: center;
+	grid-column-gap: 20px;
+
+	flex: 1 1 auto;
+	padding: 70px 0;
+}
+
+a {
+	text-decoration: none !important;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+	scrollbar-width: auto;
+	scrollbar-color: #8f54a0;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+	width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+	background: #7b72f8;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: #8f54a0;
+	border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:active {
+	background-color: #822f99;
+}
+
+/* ACCORDION */
+.accordion {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.accordion__header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #ffffff;
+	border-radius: 10px;
+	padding: 10px 20px;
+	min-width: 320px;
+}
+
+.accordion__item.active .accordion__header {
+	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.accordion__icon svg {
+	fill: red;
+	height: 24px;
+	width: 24px;
+}
+
+.accordion__toggle {
+	transition: all 0.25s ease-out;
+}
+.accordion__toggle svg {
+	height: 24px;
+	width: 24px;
+	fill: #8a93ea;
+}
+.accordion__item.active .accordion__toggle {
+	transform: rotate(-180deg);
+}
+
+.accordion__item {
+	margin-left: 25px;
+}
+
+.accordion__item.active {
+	border-radius: 10px;
+	background-color: rgb(243, 243, 243);
+}
+
+.accordion__content {
+	display: none;
+	min-height: 50px;
+	width: 100%;
+}
+
+.accordion__item.active .accordion__content {
+	display: block;
+}
+
+/* MAIN */
+.card {
+	box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.25);
+	border-radius: 10px !important;
+	border: none !important;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	grid-column-start: 3;
+	grid-column-end: 11;
+}
+
+.form__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+
+	min-height: 75px;
+	padding: 5px 25px;
+
+	border-radius: 10px 10px 0 0;
+	background-color: #8a93ea;
+}
+
+.form__title {
+	color: #ffffff;
+	font-size: 28px;
+	font-weight: 700;
+}
+
+.form__settings svg {
+	fill: #ffffff;
+	height: 32px;
+	width: 32px;
+}
+.form__settings:hover svg {
+	fill: #fc7474;
+}
+
+.form__setting {
+	cursor: pointer;
+}
+
+.form__content {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	min-height: 100px;
+	background-color: #babfee;
+	row-gap: 20px;
+	column-gap: 20px;
+	align-items: center;
+	justify-content: center;
+
+	padding: 25px;
+}
+
+.form__content_field {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.form__content_field svg {
+	fill: #ffffff;
+	height: 32px;
+	width: 32px;
+}
+
+.form__content_field input[type='checkbox'] + label {
+	margin-left: 10px;
+}
+
+.form__content_field.error input,
+.form__content_field.error select {
+	outline: red 3px solid;
+	/* border: 3px solid red; */
+}
+
+.form__full_field {
+	grid-column-start: 1;
+	grid-column-end: 3;
+	background-color: #8a93ea;
+	border-radius: 10px;
+	padding: 5px 10px;
+	font-weight: 700;
+}
+
+.form__content input,
+.form__content select {
+	margin-left: 25px;
+	padding: 5px 10px;
+
+	border: none;
+	outline: none;
+	border-radius: 5px;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.form__footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 15px 10px;
+	background-color: #8a93ea;
+	border-radius: 0 0 10px 10px;
+}
+
+.form__footer button {
+	display: flex;
+
+	color: #ffffff;
+	font-weight: 700;
+	font-size: 24px;
+
+	border: none;
+	background-color: #f1c1fb;
+	border-radius: 5px;
+
+	padding: 5px 10px;
+}
+
+.form__footer button span {
+	margin-right: 10px;
+}
+
+.form__footer button svg {
+	fill: #ffffff;
+	height: 32px;
+	width: 32px;
+}
+/* MAIN */
+
+/* FORM ERRORS */
+.validate-errors {
+	display: flex;
+	flex-direction: column;
+
+	grid-column-start: 1;
+	grid-column-end: 3;
+
+	border-radius: 10px;
+	/* min-width: 320px; */
+}
+.validate-errors__title {
+	font-size: 18px;
+	font-weight: 700;
+	padding: 5px 10px;
+	border-radius: 10px 10px 0 0;
+	background-color: aliceblue;
+}
+
+.validate-errors__body {
+	padding: 10px 20px;
+	border-radius: 0 0 10px 10px;
+	background-color: #ffffff;
+}
+
+.validate-error {
+	display: flex;
+	flex-direction: row;
+	margin: 10px 0;
+}
+
+.validate-error__icon {
+	margin: 0 5px;
+}
+
+.validate-error__icon svg {
+	fill: #ff0000;
+	height: 24px;
+	width: 24px;
+}
+
+.validate-error__text {
+	display: flex;
+}
+
+.validate-error__text_field::first-letter {
+	text-transform: uppercase;
+}
+
+.validate-error__text_field {
+	font-weight: 700;
+}
+.validate-error__text_name {
+	margin-left: 10px;
+}
+/* FORM ERRORS */

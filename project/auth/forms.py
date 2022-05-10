@@ -8,15 +8,19 @@ from project.models import User
 class RegistrationForm(FlaskForm):
     email = StringField("Email: ", validators=[DataRequired(message="Необходимо ввести Почту"),
                                                Email(message="Введеная почта является невалидной"),
-                                               Length(min=1, max=50,
+                                               Length(max=50,
                                                       message="Длина почты не должна превышать 50 символов")])
     last_name = StringField("Last name: ",
-                            validators=[DataRequired(message="Необходимо ввести Фамилию"), Length(min=4, max=50)])
+                            validators=[DataRequired(message="Необходимо ввести Фамилию"),
+                                        Length(max=25, message="Длина фамилии не должна превышать 25 символов")])
     first_name = StringField("First name: ",
-                             validators=[DataRequired(message="Необходимо ввести Имя"), Length(min=2, max=50)])
-    login = StringField("Login: ", validators=[DataRequired(message="Необходимо ввести логин")])
+                             validators=[DataRequired(message="Необходимо ввести Имя"),
+                                         Length(max=25, message="Длина имени не должна превышать 25 символов")])
+    login = StringField("Login: ", validators=[DataRequired(message="Необходимо ввести логин"),
+                                               Length(max=25, message="Длина логина не должна превышать 25 символов")])
     password = PasswordField("Password: ",
-                             validators=[DataRequired(message="Необходимо ввести пароль"), Length(min=4, max=50),
+                             validators=[DataRequired(message="Необходимо ввести пароль"),
+                                         Length(min=4, max=50, message="Длина пароля должна быть от 4 до 50 символов"),
                                          EqualTo('password_confirmation',
                                                  message='Пароли должны совпадать')])
     password_confirmation = PasswordField('Confirm password:')
@@ -29,7 +33,7 @@ class RegistrationForm(FlaskForm):
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered')
+            raise ValidationError('Почта уже занята')
 
 
 class LoginForm(FlaskForm):
@@ -37,3 +41,9 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password: ", validators=[Length(max=50)])
     remember = BooleanField('Remember me')
     submit = SubmitField("Log in")
+
+    def validate_email(self, field):
+        user = User.query.filter_by(email=field.data).first()
+        # Check password
+        if user is None or not user.verify_password(self.password.data):
+            raise ValidationError('Неверная почта или пароль')
