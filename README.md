@@ -1,3 +1,2 @@
-# Flask-Server
-Simple Flask Server 
-Blogs
+# Flask-Server, MyBlogs
+Данный проект создан в рамках курсовой работы. 
