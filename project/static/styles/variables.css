@@ -1,0 +1,9 @@
+:root {
+	--header-svg-color: #1a3bca;
+	--header-color-primary: #1a3bca;
+	--header-underline-color: #1a3bca;
+
+	--grid-column-width: 80px;
+	--grid-column-count: 12;
+	--grid-column-gap: 20px;
+}

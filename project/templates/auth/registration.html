@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block links %}
+{% endblock %}
+
+{% block content %}
+<div class="form card">
+    <form action="{{url_for('auth.register')}}" method="post" id="form_register">
+        {{ form.hidden_tag() }}
+
+        <div class="form__header">
+            <div class="form__title">
+                Регистарция
+            </div>
+            <div class="form__settings">
+                <div class="form__register_setting" id="reset_form_register">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path
+                            d="M496 48V192c0 17.69-14.31 32-32 32H320c-17.69 0-32-14.31-32-32s14.31-32 32-32h63.39c-29.97-39.7-77.25-63.78-127.6-63.78C167.7 96.22 96 167.9 96 256s71.69 159.8 159.8 159.8c34.88 0 68.03-11.03 95.88-31.94c14.22-10.53 34.22-7.75 44.81 6.375c10.59 14.16 7.75 34.22-6.375 44.81c-39.03 29.28-85.36 44.86-134.2 44.86C132.5 479.9 32 379.4 32 256s100.5-223.9 223.9-223.9c69.15 0 134 32.47 176.1 86.12V48c0-17.69 14.31-32 32-32S496 30.31 496 48z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="form__content">
+            <div class="form__content_field {% if form.email.errors %}error{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path
+                        d="M464 64C490.5 64 512 85.49 512 112C512 127.1 504.9 141.3 492.8 150.4L275.2 313.6C263.8 322.1 248.2 322.1 236.8 313.6L19.2 150.4C7.113 141.3 0 127.1 0 112C0 85.49 21.49 64 48 64H464zM217.6 339.2C240.4 356.3 271.6 356.3 294.4 339.2L512 176V384C512 419.3 483.3 448 448 448H64C28.65 448 0 419.3 0 384V176L217.6 339.2z" />
+                </svg>
+                <input name="email" placeholder="Введите почту" type="email" maxlength="50" autocomplete="off" {% if
+                    form.email.data %} value="{{form.email.data}}" {% endif %} required />
+            </div>
+            <div class="form__content_field {% if form.login.errors %}error{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                        d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z" />
+                </svg>
+                <input name="login" placeholder="Введите логин" type="text" maxlength="25" autocomplete="off" {% if
+                    form.login.data %} value="{{form.login.data}}" {% endif %} required />
+            </div>
+            <div class="form__content_field {% if form.last_name.errors %}error{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                        d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z" />
+                </svg>
+                <input name="last_name" placeholder="Введите фамилию" type="text" maxlength="25" {% if
+                    form.last_name.data %} value="{{form.last_name.data}}" {% endif %} autocomplete="off" required />
+            </div>
+            <div class="form__content_field {% if form.first_name.errors %}error{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                        d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z" />
+                </svg>
+                <input name="first_name" placeholder="Введите имя" type="text" maxlength="25" {% if form.first_name.data
+                    %} value="{{form.first_name.data}}" {% endif %} autocomplete="off" required />
+            </div>
+            <div class="form__content_field {% if form.password.errors %}error{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                        d="M80 192V144C80 64.47 144.5 0 224 0C303.5 0 368 64.47 368 144V192H384C419.3 192 448 220.7 448 256V448C448 483.3 419.3 512 384 512H64C28.65 512 0 483.3 0 448V256C0 220.7 28.65 192 64 192H80zM144 192H304V144C304 99.82 268.2 64 224 64C179.8 64 144 99.82 144 144V192z" />
+                </svg>
+                <input name="password" placeholder="Введите пароль" type="password" required />
+            </div>
+            <div class="form__content_field {% if form.password.errors %}error{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                        d="M80 192V144C80 64.47 144.5 0 224 0C303.5 0 368 64.47 368 144V192H384C419.3 192 448 220.7 448 256V448C448 483.3 419.3 512 384 512H64C28.65 512 0 483.3 0 448V256C0 220.7 28.65 192 64 192H80zM144 192H304V144C304 99.82 268.2 64 224 64C179.8 64 144 99.82 144 144V192z" />
+                </svg>
+                <input name="password_confirmation" placeholder="Введите повторно пароль" type="password" required />
+            </div>
+            <div class="form__content_field">
+                <select name="age" required>
+                    <option selected value="adult">Старше 18 лет</option>
+                    <option value="child">Младше 18 лет</option>
+                </select>
+            </div>
+            <div class="form__content_field">
+                <select name="gender" required>
+                    <option selected value="male">Мужчина</option>
+                    <option value="female">Женщина</option>
+                </select>
+            </div>
+            <div class="form__content_field form__full_field">
+                <input class="form-check-input" type="checkbox" name="agreement" id="agreement" {% if
+                    form.agreement.data %} checked {% endif %}>
+                <label class="form-check-label" for="agreement">
+                    I accept the terms and conditions for signing up to this service, and hereby confirm
+                    I have read the privacy policy.
+                </label>
+            </div>
+
+
+            <!-- ERROS FORM  -->
+            {% if form.errors %}
+            <div class="validate-errors">
+                <div class="validate-errors__title">Некорректные данные</div>
+                <div class="validate-errors__body">
+                    {% for fieldName, errorMessages in form.errors.items() %}
+                    <div class=" validate-error">
+                        <div class="validate-error__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                <path
+                                    d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM232 152C232 138.8 242.8 128 256 128s24 10.75 24 24v128c0 13.25-10.75 24-24 24S232 293.3 232 280V152zM256 400c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 385.9 273.4 400 256 400z" />
+                            </svg>
+                        </div>
+                        <div class="validate-error__text">
+                            <div class="validate-error__text_field">{{ fieldName }}:</div>
+                            <div class="validate-error__text_name">{{ ', '.join(errorMessages) }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!--FORM FOOTER-->
+        <div class="form__footer">
+            <button type="submit">
+                <span class="button__text">Отправить</span>
+                <div class="button__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path
+                            d="M503.7 226.2l-176 151.1c-15.38 13.3-39.69 2.545-39.69-18.16V272.1C132.9 274.3 66.06 312.8 111.4 457.8c5.031 16.09-14.41 28.56-28.06 18.62C39.59 444.6 0 383.8 0 322.3c0-152.2 127.4-184.4 288-186.3V56.02c0-20.67 24.28-31.46 39.69-18.16l176 151.1C514.8 199.4 514.8 216.6 503.7 226.2z" />
+                    </svg>
+                </div>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="../../static/js/form_register.js"></script>
+{% endblock %}
