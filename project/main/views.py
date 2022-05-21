@@ -1,43 +1,51 @@
-from flask_login import login_required
+from datetime import datetime
+
+from flask_login import login_required, current_user
 from . import main
 from . import controller
+from .. import db
 
 
-# import logging
-# fileLogg = logging.getLogger('file')  # Logger for file
-# consoleLogg = logging.getLogger('console')  # Logger for console
 
-# @main.before_app_request
-# def before_request_auth():
-#     if current_user.is_anonymous:
-#         if request.endpoint and request.blueprint != 'auth' and request.endpoint != 'static':
-#             return redirect(url_for('auth.login'))
-#
-#
-# @main.route("/", methods=["GET", "POST"])
-# def redirect_to_page():
-#     return redirect(url_for('main.all_blogs'))
+@main.before_request
+def before_request():
+    # update last active
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
 
 
-# @main.route("/home", methods=["GET", "POST"])
-# def home():
-#     return controller.home()
+# Unauthorized
+
+@main.route("/")
+@main.route("/all-blogs/")
+@main.route("/all-blogs/<int:page>", methods=["GET", "POST"])
+def all_blogs(page=1):
+    return controller.all_blogs(page)
 
 
 @main.route("/profile/<int:id>", methods=["GET", "POST"])
-@login_required
 def profile(id):
     return controller.profile(id)
 
 
-@main.route("/all-posts/<int:page>", methods=["GET", "POST"])
-def all_blogs(page):
-    return controller.all_blogs(page)
+@main.route("/load/avatar/<int:id>", methods=["GET"])
+def load_avatar(id):
+    return controller.load_avatar(id)
 
 
+@main.route("/load/blog/<int:id>/preview_image", methods=["GET"])
+def load_blog_preview_image(id):
+    return controller.load_blog_preview_image(id)
+
+
+# Authorized
+
+@main.route("/my-blogs/")
 @main.route("/my-blogs/<int:page>", methods=["GET", "POST"])
-def my_blogs(page):
-    return 'myblogs ' + page
+@login_required
+def my_blogs(page=1):
+    return controller.my_blogs(page)
 
 
 @main.route("/create-blog", methods=["GET", "POST"])
@@ -50,9 +58,3 @@ def create_blog():
 @login_required
 def upload_avatar():
     return controller.upload_avatar()
-
-
-@main.route("/load/avatar/<int:id>", methods=["GET"])
-@login_required
-def load_avatar(id):
-    return controller.load_avatar(id)

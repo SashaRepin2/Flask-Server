@@ -1,72 +1,45 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Create post</div>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ url_for('main.create_blog') }}">
-                        {{ form.hidden_tag() }}
+{% block links %}
+<link href="{{ url_for('static', filename='styles/create_blog.css') }}" rel="stylesheet">
+{% endblock %}
 
+<div class="create-blog card">
+    <form method="POST" action="{{ url_for('main.create_blog') }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
 
-                        {% if form.title.errors %}
-                        <div class="row mb-3 mx-5 alert alert-danger">
-                            {% for error in form.title.errors %}
-                            <span style="form-field-error">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-
-                        {% if form.body.errors %}
-                        <div class="row mb-3 mx-5 alert alert-danger">
-                            {% for error in form.body.errors %}
-                            <span style="form-field-error">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-
-
-                        <div class="row mb-3">
-                            <label for="title" class="col-md-4 col-form-label text-md-end">Title</label>
-
-                            <div class="col-md-6">
-                                <input id="title" type="text" class="form-control"
-                                       name="title" value="" required autofocus maxlength="100">
-                                <span class="invalid-feedback" role="alert">
-                                        <strong></strong>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="body" class="col-md-4 col-form-label text-md-end">Body</label>
-
-                            <div class="col-md-6">
-                                <textarea id="body" maxlength="500"
-                                          class="form-control" name="body"
-                                          required></textarea>
-
-                                <span class="invalid-feedback" role="alert">
-                                        <strong></strong>
-                                </span>
-
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Create
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        <div class="create-blog__header">
+            <div class="create-blog__header_text">
+                {{ title }}
             </div>
         </div>
-    </div>
+
+        <div class="create-blog__content">
+            <input type="file" id="file" name="preview_image" class="file" placeholder="preview" required>
+            <label for="file">
+                Select file
+            </label>
+            <input id="title" placeholder="title" type="text" name="title" value="" required>
+
+            <input id="description" placeholder="description" type="text" name="description" value="" required>
+
+            <textarea class="full_field" id="content" placeholder="content" type="text" name="content" value=""
+                required></textarea>
+        </div>
+        <div class="create-blog__footer">
+            <button type="submit">
+                <span class="button__text">Отправить</span>
+                <div class="button__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path
+                            d="M503.7 226.2l-176 151.1c-15.38 13.3-39.69 2.545-39.69-18.16V272.1C132.9 274.3 66.06 312.8 111.4 457.8c5.031 16.09-14.41 28.56-28.06 18.62C39.59 444.6 0 383.8 0 322.3c0-152.2 127.4-184.4 288-186.3V56.02c0-20.67 24.28-31.46 39.69-18.16l176 151.1C514.8 199.4 514.8 216.6 503.7 226.2z" />
+                    </svg>
+                </div>
+            </button>
+        </div>
+    </form>
 </div>
+
 
 {% endblock %}

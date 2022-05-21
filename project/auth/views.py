@@ -1,25 +1,16 @@
-# Осуществление регистрации пользователя
-from flask import request, url_for
-from flask_login import login_required, current_user
-from werkzeug.utils import redirect
-
+from flask_login import login_required
 from project.auth import auth, controller
-
-
-# @auth.before_request
-# def before_request_main():
-#     if current_user.is_authenticated:
-#         if request.endpoint and request.blueprint != 'main' and request.endpoint not in ['static', 'auth.logout']:
-#             print(request.endpoint)
-#             return redirect(url_for('main.home', id=current_user.id))
+from project.decorators import login_not_required
 
 
 @auth.route('/register', methods=['POST', 'GET'])
+@login_not_required
 def register():
     return controller.register()
 
 
 @auth.route('/login', methods=['GET', 'POST'])
+@login_not_required
 def login():
     return controller.login()
 

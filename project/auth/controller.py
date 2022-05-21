@@ -1,5 +1,5 @@
 from flask import render_template, request, url_for, flash
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user
 from werkzeug.utils import redirect
 
 from .forms import RegistrationForm, LoginForm
@@ -9,6 +9,10 @@ from ..models import User
 
 
 def register():
+    # If user already in account, then redirect him
+    if current_user.is_authenticated:
+        return redirect(url_for('main.all_blogs'))
+
     register_form = RegistrationForm()
     if register_form.validate_on_submit():
         # CREATE DB MODEL OBJECT
@@ -38,7 +42,7 @@ def register():
 def login():
     # If user already in account, then redirect him
     if current_user.is_authenticated:
-        redirect(url_for('main.home'))
+        return redirect(url_for('main.all_blogs'))
 
     # Validate form data
     login_form = LoginForm()

@@ -1,0 +1,126 @@
+.create-blog {
+	grid-column-start: 3;
+	grid-column-end: 11;
+}
+.create-blog__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+
+	min-height: 75px;
+	padding: 5px 25px;
+
+	border-radius: 10px 10px 0 0;
+	background-color: #8a93ea;
+}
+
+.create-blog__header_text {
+	color: #fff;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.create-blog__content {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	min-height: 100px;
+	background-color: #babfee;
+	row-gap: 20px;
+	column-gap: 20px;
+	align-items: center;
+	justify-content: center;
+
+	padding: 25px;
+}
+.create-blog__field {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.create-blog__field svg {
+	fill: #ffffff;
+	height: 32px;
+	width: 32px;
+}
+
+/* FIELDS */
+
+.create-blog__content_field {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.create-blog__content_field svg {
+	fill: #ffffff;
+	height: 32px;
+	width: 32px;
+}
+
+.create-blog__content_field input[type='checkbox'] + label {
+	margin-left: 10px;
+}
+
+.create-blog__content_field.error input,
+.create-blog__content_field.error select {
+	outline: red 3px solid;
+	/* border: 3px solid red; */
+}
+
+.full_field {
+	grid-column-start: 1;
+	grid-column-end: 3;
+	background-color: #8a93ea;
+	border-radius: 10px;
+	padding: 5px 10px;
+	font-weight: 700;
+}
+
+.create-blog__content input,
+.create-blog__content select {
+	margin-left: 25px;
+	padding: 5px 10px;
+
+	border: none;
+	outline: none;
+	border-radius: 5px;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+/* FOOTER */
+
+.create-blog__footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 15px 10px;
+	background-color: #8a93ea;
+	border-radius: 0 0 10px 10px;
+}
+
+.create-blog__footer button {
+	display: flex;
+
+	color: #ffffff;
+	font-weight: 700;
+	font-size: 24px;
+
+	border: none;
+	background-color: #f1c1fb;
+	border-radius: 5px;
+
+	padding: 5px 10px;
+}
+
+.create-blog__footer button span {
+	margin-right: 10px;
+}
+
+.create-blog__footer button svg {
+	fill: #ffffff;
+	height: 32px;
+	width: 32px;
+}

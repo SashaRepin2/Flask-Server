@@ -1,11 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, TextAreaField, SubmitField, FileField
 from wtforms.validators import Length, DataRequired
 
 
-class PostForm(FlaskForm):
-    title = StringField("Title: ", validators=[DataRequired(), Length(min=1, max=100,
-                                                                      message="Заголовок должен быть больше 100 символов")])
-    body = StringField("Body: ", validators=[DataRequired(), Length(min=1, max=500,
-                                                                    message="Содержание статьи должно превышать 500 символов")])
+class BlogForm(FlaskForm):
+    title = StringField("Title: ", validators=[DataRequired(), Length(max=25,
+
+                                                                      message="Заголовок не должен быть больше 25 символов")])
+    description = StringField("Description", validators=[DataRequired(), Length(max=50,
+                                                                                message="Описание не должно превышать длины в 50 символов")])
+
+    preview_image = FileField("Preview")
+    content = TextAreaField("Content: ", validators=[DataRequired()])
     submit = SubmitField("Create")

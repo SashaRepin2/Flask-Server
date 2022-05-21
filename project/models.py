@@ -4,6 +4,8 @@ from enum import Enum
 
 import bleach
 from flask_login import UserMixin
+from sqlalchemy.orm import EXT_SKIP
+
 from project import login_manager
 from markdown import markdown
 from project import db
@@ -79,8 +81,9 @@ class User(UserMixin, db.Model):
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
 
-    def __repr__(self):
-        return f"<{self.id}> {self.email},  {self.login}"
+    # def __init__(self, **kwargs):
+    #     super(User, self).__init__(**kwargs)
+    #     if self.avatar is None:
 
     @property
     def password(self):
@@ -112,12 +115,23 @@ class User(UserMixin, db.Model):
     def get_user_by_email(email):
         return User.query.filter_by(email=email).first()
 
+    def set_user_avatar(self, binary_img):
+        # if binary_img:
+        self.avatar = binary_img
+
+    def get_user_avatar(self):
+        return self.avatar
+
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+def __repr__(self):
+    return f"<{self.id}> {self.email},  {self.login}"
 
 
 class Blog(db.Model):
@@ -129,7 +143,9 @@ class Blog(db.Model):
     description = db.Column(db.String(50))
     preview_image = db.Column(db.LargeBinary)
     content = db.Column(db.Text)
+    content_html = db.Column(db.Text, default=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Relationships
@@ -137,10 +153,13 @@ class Blog(db.Model):
 
     @staticmethod
     def on_changed_content(target, value, oldvalue, initiator):
+        if value == oldvalue:
+            return EXT_SKIP
+
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
                         'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
                         'h1', 'h2', 'h3', 'p', 'img']
-        target.body_html = bleach.linkify(bleach.clean(
+        target.content_html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True))
 
@@ -149,7 +168,7 @@ class Blog(db.Model):
 
 
 # Event listener Blog Content changes
-db.event.listen(Blog.content, 'set', Blog.on_changed_content)
+db.event.listen(Blog.content, 'set', Blog.on_changed_content, active_history=True, retval=True)
 
 
 class Comment(db.Model):
@@ -159,5 +178,6 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     blog_id = db.Column(db.Integer, db.ForeignKey('blogs.id'))
