@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block links %}
+<link href="{{ url_for('static', filename='styles/blogs.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+<div class="blogs">
+    {% if blogs %}
+    {% for blog in blogs %}
+
+    <div class="blog">
+        <div class="card__header">
+            <img src="{{url_for('main.load_blog_preview_image', id=blog.id)}}" alt="card__image" height="200"
+                width="600" class="card__image">
+        </div>
+        <div class="card__body">
+            <span class="tag tag-blue">Technology</span>
+            <h4>{{ blog.title }}</h4>
+            <p>{{ blog.description }}</p>
+        </div>
+        <div class="card__footer">
+            <div class="user">
+                <a href="{{url_for('main.profile', id=blog.author.id) }}"> <img
+                        src="{{url_for('main.load_avatar', id=blog.author.id)}}" width="64px" height="64px"
+                        alt="user__image " class="user__image">
+                </a>
+                <div class="user__info ">
+                    <h5>{{ blog.author.login }}</h5>
+                    <small>{{ moment(blog.timestamp).fromNow() }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+
+    {% else %}
+    Посты не найдены
+    {% endif %}
+</div>
+{% endblock %}
