@@ -4,13 +4,6 @@
 <span style="margin:0;padding:0;">Flask, Blogs</span>
 <h1 style="color: steelblue">ToDo:</h1>
 <ul style="font-size: 18px">
-    <li>
-        Create pages
-            <ul>
-                <li>
-                    Home Page [-]
-                </li>
-            </ul>
-    </li>
+   
 </ul>
 
