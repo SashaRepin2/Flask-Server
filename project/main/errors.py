@@ -11,4 +11,9 @@ def error_404(e):
 
 @login_manager.unauthorized_handler
 def error_401():
-    return render_template('errors/404.html', error=401, error_text="Нет доступа"), 401
+    return render_template('errors/404.html', error=401, error_text="Не авторизован"), 401
+
+
+@main.app_errorhandler(403)
+def error_403(e):
+    return render_template('errors/404.html', error=403, error_text="Нет прав"), 403

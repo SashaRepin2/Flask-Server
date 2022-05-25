@@ -13,7 +13,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Roles(Enum):
-    CREATOR = 'creator'
     ADMIN = 'admin'
     USER = 'user'
 
@@ -27,12 +26,19 @@ class Role(db.Model):
 
     @staticmethod
     def insert_roles():
+        roles_success_add = []
+
         for role in Roles:
-            role_db = Role.query.filter_by(name=role).first()
+            success = {'name': role, 'is_success': False}
+            role_db = Role.query.filter_by(name=role.value).first()
             if role_db is None:
-                role_db = Role(name=role)
+                role_db = Role(name=role.value, permissions_level=1)
+                success['is_success'] = True
             db.session.add(role_db)
+            roles_success_add.append(success)
         db.session.commit()
+
+        return roles_success_add
 
 
 class Follow(db.Model):
@@ -81,13 +87,20 @@ class User(UserMixin, db.Model):
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
 
-    # def __init__(self, **kwargs):
-    #     super(User, self).__init__(**kwargs)
-    #     if self.avatar is None:
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+            self.role = Role.query.filter_by(name=Roles.USER.value).first()
 
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
+
+    def get_role(self):
+        print(self.role_id)
+        role = Role.query.filter_by(id=self.role_id).first()
+        print(role)
+        return role
 
     @password.setter
     def password(self, password):
@@ -126,12 +139,19 @@ class User(UserMixin, db.Model):
     def load_user(id):
         return User.query.get(int(id))
 
+    def has_permissions(self, role):
+        return self.role is not None and self.role.name == role
+
+    def change_role(self, role):
+        role = Role.query.filter_by(name=role).first()
+        self.role_id = role.id
+
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
 
-def __repr__(self):
-    return f"<{self.id}> {self.email},  {self.login}"
+    def __repr__(self):
+        return f"<{self.id}> {self.email},  {self.login}"
 
 
 class Blog(db.Model):

@@ -312,3 +312,12 @@ a {
 	margin-left: 10px;
 }
 /* FORM ERRORS */
+
+.btn {
+	background-color: #7b72f8;
+	color: white;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	padding: 5px 10px;
+}

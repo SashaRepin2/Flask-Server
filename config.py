@@ -8,7 +8,6 @@ class Config:
     # DEBUG = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
 
-
     APP_NAME = os.environ.get('APP_NAME') or 'Flask app'
     FLASK_RUN_HOST = 'localhostd'
     SERVER_URL = os.environ.get('SERVER_URL') or 'http://localhost:5000'

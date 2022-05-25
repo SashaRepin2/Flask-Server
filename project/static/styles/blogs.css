@@ -115,8 +115,16 @@
 
 .card__footer {
 	display: flex;
+	flex-direction: column;
+
 	padding: 1rem;
 	margin-top: auto;
+}
+
+.card__footer a {
+	justify-self: center;
+	align-self: center;
+	margin-top: 10px;
 }
 
 .user {
@@ -133,4 +141,22 @@
 
 .user__info > small {
 	color: #666;
+}
+
+.pagination {
+	width: 100%;
+	justify-content: space-around;
+}
+
+.pagination span {
+	background: blue;
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+	border-radius: 10px;
+	padding: 5px;
+}
+
+.pagination span.disable__link {
+	background-color: gray;
 }

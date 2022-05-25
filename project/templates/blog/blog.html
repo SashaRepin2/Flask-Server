@@ -1,4 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div class="create-blog card">
+    <div class="create-blog__header">
+        <div class="create-blog__header_text">
+            {{ blog.title }}
+        </div>
+    </div>
+    <div class="blog__preview">
+        <image src="{{{url_for('main.load_blog_preview_image', id=blog.id)}}" alt="preview"/>
+    </div>
+    <div class="blog__content">
+
+
+    </div>
+    <div class="blog__footer">
+        <div class="blog__contacts">
+
+        </div>
+        <div class="commnets">
+            
+        </div>
+    </div>
+
+
+</div>
+
 {% endblock %}

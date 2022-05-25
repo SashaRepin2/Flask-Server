@@ -16,9 +16,14 @@ def profile(id):
 
 def all_blogs(page):
     blogs_per_page = int(os.environ.get('BLOGS_PER_PAGE'))
-    pagination = Blog.query.paginate(page, blogs_per_page, error_out=False)
+    pagination = Blog.query.order_by(Blog.timestamp.desc()).paginate(page, blogs_per_page, error_out=False)
     blogs = pagination.items
     return render_template('blogs.html', blogs=blogs, pagination=pagination)
+
+
+def blog(id):
+    blog = Blog.query.filter_by(id=id).first()
+    return str(blog.id)
 
 
 def my_blogs(page):

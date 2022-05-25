@@ -1,10 +1,12 @@
 from datetime import datetime
 
 from flask_login import login_required, current_user
+
 from . import main
 from . import controller
 from .. import db
-
+from ..decorators import permission_required
+from ..models import Roles
 
 
 @main.before_request
@@ -22,6 +24,12 @@ def before_request():
 @main.route("/all-blogs/<int:page>", methods=["GET", "POST"])
 def all_blogs(page=1):
     return controller.all_blogs(page)
+
+
+@main.route("/blog/<int:id>", methods=["POST", "GET"])
+def blog(id):
+    return controller.blog(id)
+
 
 
 @main.route("/profile/<int:id>", methods=["GET", "POST"])
@@ -58,3 +66,10 @@ def create_blog():
 @login_required
 def upload_avatar():
     return controller.upload_avatar()
+
+
+@main.route('/only-admin')
+@login_required
+@permission_required(Roles.ADMIN.value)
+def only_admin():
+    return 'Im admin'

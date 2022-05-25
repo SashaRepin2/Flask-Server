@@ -1,5 +1,4 @@
-from flask import request, jsonify, url_for, make_response
-from flask_jwt_extended import create_refresh_token, create_access_token
+from flask import request, jsonify, url_for,
 from werkzeug.utils import redirect
 
 from project import db
