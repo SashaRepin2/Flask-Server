@@ -16,6 +16,7 @@ cors = CORS(supports_credentials=True)  # Create Cors
 login_manager = LoginManager()
 moment = Moment()
 
+
 def create_app(config_name):
     app = Flask(__name__)  # Creating the server
     app.config.from_object(config[config_name])  # Loading the settings
@@ -34,5 +35,8 @@ def create_app(config_name):
 
     from project.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    from project.admin import admin as admin_blueprint
+    app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
     return app

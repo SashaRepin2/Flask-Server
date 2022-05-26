@@ -13,11 +13,11 @@
 
     <div class="blog">
         <div class="card__header">
-            <img src="{{url_for('main.load_blog_preview_image', id=blog.id)}}" alt="card__image" height="200"
+            <img src="{{ url_for('main.load_blog_preview_image', id=blog.id)}}" alt="card__image" height="200"
                  width="600" class="card__image">
         </div>
         <div class="card__body">
-            <span class="tag tag-blue">Technology</span>
+            <!--            <span class="tag tag-blue">Technology</span>-->
             <h4>{{ blog.title }}</h4>
             <p>{{ blog.description }}</p>
         </div>

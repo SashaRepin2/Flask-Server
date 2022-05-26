@@ -13,3 +13,8 @@ class BlogForm(FlaskForm):
     preview_image = FileField("Preview")
     content = TextAreaField("Content: ", validators=[DataRequired()])
     submit = SubmitField("Create")
+
+
+class CommentForm(FlaskForm):
+    body = StringField('Введите ваш комментарий', validators=[DataRequired()])
+    submit = SubmitField('Submit')

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="{{ url_for('admin.get_admin_role')}}" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.code.label }} {{ form.code() }}
+    {{ form.submit() }}
+</form>
+
+</body>
+</html>

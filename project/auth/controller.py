@@ -1,10 +1,10 @@
-from flask import render_template, request, url_for, flash
+from flask import render_template, url_for, flash
 from flask_login import current_user, login_user, logout_user
 from werkzeug.utils import redirect
 
 from .forms import RegistrationForm, LoginForm
 from .. import db
-from ..email import send_email
+# from ..email import send_email
 from ..models import User
 
 

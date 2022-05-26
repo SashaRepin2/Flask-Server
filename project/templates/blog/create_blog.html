@@ -34,7 +34,7 @@
                    required>
             <input class="create-blog__content_field" id="description" placeholder="description" type="text"
                    name="description" value="" required>
-            <textarea class="create-blog__content_field" id="content" placeholder="content" type="text" name="content"
+            <textarea class="create-blog__content_field" id="textarea_content" placeholder="content" type="text" name="content"
                       value=""
                       required></textarea>
         </div>
@@ -56,5 +56,25 @@
 {% endblock %}
 
 {% block scripts %}
+
+<script>
+document.getElementById('textarea_content').addEventListener('keydown', function(e) {
+  if (e.key == 'Tab') {
+    e.preventDefault();
+    var start = this.selectionStart;
+    var end = this.selectionEnd;
+
+    // set textarea value to: text before caret + tab + text after caret
+    this.value = this.value.substring(0, start) +
+      "\t" + this.value.substring(end);
+
+    // put caret at right position again
+    this.selectionStart =
+      this.selectionEnd = start + 1;
+  }
+});
+
+</script>
+
 <script src="{{ url_for('static', filename='js/imageLoader.js') }}"></script>
 {% endblock %}

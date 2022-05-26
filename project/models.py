@@ -3,6 +3,7 @@ from datetime import datetime
 from enum import Enum
 
 import bleach
+import sqlalchemy
 from flask_login import UserMixin
 from sqlalchemy.orm import EXT_SKIP
 
@@ -74,6 +75,7 @@ class User(UserMixin, db.Model):
     avatar = db.Column(db.LargeBinary, default=None)
 
     # Relationships
+
     blogs = db.relationship('Blog', backref='author', lazy='dynamic')
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     followed = db.relationship('Follow',
@@ -86,6 +88,7 @@ class User(UserMixin, db.Model):
                                 backref=db.backref('followed', lazy='joined'),
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -142,13 +145,15 @@ class User(UserMixin, db.Model):
     def has_permissions(self, role):
         return self.role is not None and self.role.name == role
 
+    def is_admin(self):
+        return self.role.name == Roles.ADMIN.value
+
     def change_role(self, role):
         role = Role.query.filter_by(name=role).first()
         self.role_id = role.id
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
-
 
     def __repr__(self):
         return f"<{self.id}> {self.email},  {self.login}"
@@ -165,6 +170,8 @@ class Blog(db.Model):
     content = db.Column(db.Text)
     content_html = db.Column(db.Text, default=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    is_accepted = db.Column(db.Boolean, default=False, server_default="0",
+                            nullable=False)
 
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
@@ -178,7 +185,7 @@ class Blog(db.Model):
 
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
                         'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
-                        'h1', 'h2', 'h3', 'p', 'img']
+                        'h1', 'h2', 'h3', 'p', 'img', 'center']
         target.content_html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True))

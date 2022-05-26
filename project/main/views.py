@@ -68,8 +68,4 @@ def upload_avatar():
     return controller.upload_avatar()
 
 
-@main.route('/only-admin')
-@login_required
-@permission_required(Roles.ADMIN.value)
-def only_admin():
-    return 'Im admin'
+

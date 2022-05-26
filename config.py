@@ -5,6 +5,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
+    COMMENTS_PER_PAGE = 10  # Time solve - add in env and default value
+
     # DEBUG = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
 

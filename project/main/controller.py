@@ -5,8 +5,8 @@ from flask_login import current_user
 from werkzeug.utils import redirect
 
 from project import db
-from project.main.forms import BlogForm
-from project.models import User, Blog, Follow
+from project.main.forms import BlogForm, CommentForm
+from project.models import User, Blog, Follow, Comment
 
 
 def profile(id):
@@ -16,19 +16,40 @@ def profile(id):
 
 def all_blogs(page):
     blogs_per_page = int(os.environ.get('BLOGS_PER_PAGE'))
-    pagination = Blog.query.order_by(Blog.timestamp.desc()).paginate(page, blogs_per_page, error_out=False)
+    pagination = Blog.query.filter_by(is_accepted=True).order_by(Blog.timestamp.desc()).paginate(page, blogs_per_page,
+                                                                                                 error_out=False)
     blogs = pagination.items
     return render_template('blogs.html', blogs=blogs, pagination=pagination)
 
 
 def blog(id):
-    blog = Blog.query.filter_by(id=id).first()
-    return str(blog.id)
+    blog = Blog.query.get_or_404(id)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(content=form.body.data,
+                          blog_id=blog.id,
+                          author=current_user._get_current_object())
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('main.blog', id=blog.id, page=-1))
+
+    page = request.args.get('page', default=1, type=int)
+    if page == -1:
+        page = (blog.comments.count() - 1) // \
+               current_app.config['COMMENTS_PER_PAGE'] + 1
+    pagination = blog.comments.order_by(Comment.timestamp.desc()).paginate(
+        page, per_page=current_app.config['COMMENTS_PER_PAGE'],
+        error_out=False)
+    comments = pagination.items
+
+    return render_template('./blog/blog.html', blog=blog, form=form, comments=comments, pagination=pagination)
 
 
 def my_blogs(page):
     blogs_per_page = int(os.environ.get('BLOGS_PER_PAGE'))
-    pagination = Blog.query.filter_by(author_id=current_user.id).paginate(page, blogs_per_page, error_out=False)
+    pagination = Blog.query.filter_by(author_id=current_user.id).order_by(Blog.timestamp.desc()).paginate(page,
+                                                                                                          blogs_per_page,
+                                                                                                          error_out=False)
     blogs = pagination.items
     return render_template('blogs.html', blogs=blogs, pagination=pagination)
 
