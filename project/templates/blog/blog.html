@@ -13,6 +13,17 @@
         <div class="create-blog__header_text">
             {{ blog.title }}
         </div>
+
+        {% if current_user.id == blog.author.id %}
+        <div class="d-flex">
+            <a href="{{ url_for('main.edit_blog', id=blog.id) }}" class="btn btn-warning mx-3 ">
+                Редактировать
+            </a>
+            <form class="mx-3" action="{{ url_for('main.delete_blog', id=blog.id) }}" method="post">
+                <button type="submit" class="btn btn-danger">Удалить</button>
+            </form>
+        </div>
+        {% endif %}
     </div>
     <div class="blog__preview">
         <image src="{{url_for('main.load_blog_preview_image', id=blog.id)}}" alt="preview"/>
@@ -43,7 +54,7 @@
                 <div class="form-check form-switch d-flex align-items-center">
                     <input name="accepted" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {% if
                            blog.is_accepted %} checked {% endif %}>
-                    <button type="submit" class="btn  btn-primary mx-2">Одобрить</button>
+                    <button type="submit" class="btn btn-primary mx-2">Одобрить</button>
                 </div>
             </form>
         </div>
@@ -54,6 +65,7 @@
         <div class="my-3 p-2" style="background-color: green; color:white;width:max-content;">
             Ваш блог одобрен
         </div>
+
         {% else %}
         <div class="my-3 p-2" style="background-color: red; color:white; width:max-content;">
             Ваш блог не одобрен

@@ -2,6 +2,7 @@ import os
 
 from flask import render_template, url_for, request, make_response, flash, current_app
 from flask_login import current_user
+from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
 
 from project import db
@@ -54,10 +55,49 @@ def my_blogs(page):
     return render_template('blogs.html', blogs=blogs, pagination=pagination)
 
 
+def delete_blog(id):
+    blog = Blog.query.get_or_404(id)
+    comments = Comment.query.filter_by(blog_id=blog.id).all()
+    print(comments)
+
+    if comments:
+        for comment in comments:
+            db.session.delete(comment)
+
+    db.session.delete(blog)
+    db.session.commit()
+
+    return redirect(url_for('main.my_blogs'))
+
+
+def edit_blog(id):
+    blog = Blog.query.get_or_404(id)
+    form = BlogForm()
+
+    if current_user.id != blog.author_id:
+        abort(403)
+
+    if form.validate_on_submit():
+
+        image_data = request.files[form.preview_image.name].read()
+        blog.title = form.title.data.strip()
+        blog.description = form.description.data.strip()
+        blog.content = form.content.data.strip()
+
+        if image_data:
+            blog.preview_image = image_data
+
+        db.session.add(blog)
+        db.session.commit()
+        return redirect(url_for('main.blog', id=id))
+
+    print(form.errors)
+    return render_template('./blog/edit_blog.html', id=id, blog=blog, form=form)
+
+
 def create_blog():
     form = BlogForm()
     if form.validate_on_submit():
-        print(form.preview_image.data)
         image_data = request.files[form.preview_image.name].read()
 
         post = Blog(title=form.title.data, preview_image=image_data, description=form.description.data,
@@ -65,7 +105,7 @@ def create_blog():
                     author=current_user._get_current_object())
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('main.all_blogs'))
+        return redirect(url_for('main.my_blogs'))
 
     return render_template('./blog/create_blog.html', title='Create blog', form=form)
 

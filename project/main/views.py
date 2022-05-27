@@ -31,7 +31,6 @@ def blog(id):
     return controller.blog(id)
 
 
-
 @main.route("/profile/<int:id>", methods=["GET", "POST"])
 def profile(id):
     return controller.profile(id)
@@ -56,6 +55,18 @@ def my_blogs(page=1):
     return controller.my_blogs(page)
 
 
+@main.route("/delete-blog/<int:id>", methods=["POST"])
+@login_required
+def delete_blog(id):
+    return controller.delete_blog(id)
+
+
+@main.route("/edit-blog/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_blog(id):
+    return controller.edit_blog(id)
+
+
 @main.route("/create-blog", methods=["GET", "POST"])
 @login_required
 def create_blog():
@@ -66,6 +77,3 @@ def create_blog():
 @login_required
 def upload_avatar():
     return controller.upload_avatar()
-
-
-
